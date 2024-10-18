@@ -34,12 +34,14 @@ The technology used is the Go language in version 1.20.3.
 ## Project Organization
 ```
 .
-├── cmd..................: Contains the main file to run the application.
-├── docs.................: Contains the documentation from some examples.
-├── internal.............: all core implementation its here.
-│   ├── model............: All application structures (DTO).
-│   ├── usecase..........: Application core validations.
-│   └── util.............: General stuff.
+├── /cmd
+│   ├── /app....................: Contains main file to run the application
+│   └── /handlers...............: Contains the entry point for application integration
+├── /docs.......................: Contains the documentation from some examples
+├── /internal...................: All core implementation its here
+│   ├── /models.................: Contains Data structure
+│   ├── /services...............: Contains all business validation
+│   └── /utils..................: General stuff
 
 ```
 
