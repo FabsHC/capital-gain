@@ -73,5 +73,5 @@ make -f Makefile test-docker
 ```
 ### Using go:
 ```shell
-make -f Makefile test-go
+make -f Makefile test
 ```
