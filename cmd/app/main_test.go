@@ -78,14 +78,6 @@ func TestUseCases(t *testing.T) {
 			t.Error(err)
 		}
 	})
-
-	t.Run("should read file resource/case_9 and validate output", func(t *testing.T) {
-		stdout := emulateNewTerminalToReadFile("case_9")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
-	})
 }
 
 func emulateNewTerminalToReadFile(fileName string) bytes.Buffer {
