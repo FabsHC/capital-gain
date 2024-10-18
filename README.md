@@ -50,19 +50,19 @@ Examples below:
 ### Using Go Run
 You can run the commands below to run the application
 ```shell
-go run cmd/main.go
+go run cmd/app/main.go
 ```
 ```shell
-go run cmd/main.go < resources/case_7 
+go run cmd/app/main.go < resources/case_7 
 ```
 
 ### Using Docker
 Just run the docker commands below to create the docker image and run the container.
 ``` shell
-docker run -it --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock golang:1.22 go run cmd/main.go
+docker run -it --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock golang:1.22 go run cmd/app/main.go
 ```
 ``` shell
-docker run -i --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock golang:1.22 go run cmd/main.go < resources/case_1
+docker run -i --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock golang:1.22 go run cmd/app/main.go < resources/case_1
 ```
 
 ## How to run the tests
