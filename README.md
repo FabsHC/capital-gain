@@ -1,6 +1,6 @@
 # Capital Gain
 ![capital-gain](https://img.shields.io/badge/capital--gain-gray?logo=go)
-![technology Go 1.20.3](https://img.shields.io/badge/technology-go%201.20.3-blue.svg)
+![technology Go 1.22](https://img.shields.io/badge/technology-go%201.22-blue.svg)
 [![Go Coverage](https://github.com/FabsHC/capital-gain/wiki/coverage.svg)](https://raw.githack.com/wiki/FabsHC/capital-gain/coverage.html)
 
 This project simulates the purchase and sale of shares. It does not use any database, all data is stored in memory during the execution of a list of operations.
@@ -59,10 +59,10 @@ go run cmd/main.go < resources/case_7
 ### Using Docker
 Just run the docker commands below to create the docker image and run the container.
 ``` shell
-docker run -it --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock golang:1.20.3 go run cmd/main.go
+docker run -it --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock golang:1.22 go run cmd/main.go
 ```
 ``` shell
-docker run -i --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock golang:1.20.3 go run cmd/main.go < resources/case_1
+docker run -i --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock golang:1.22 go run cmd/main.go < resources/case_1
 ```
 
 ## How to run the tests
