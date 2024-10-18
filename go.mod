@@ -1,4 +1,4 @@
-module ganho-capital
+module capital-gain
 
 go 1.22
 
