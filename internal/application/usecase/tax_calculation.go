@@ -1,24 +1,28 @@
 package usecase
 
 import (
-	"ganho-capital/internal/application/model"
+	"capital-gain/internal/application/model"
 )
 
+type TaxCalculation interface {
+	Execute(operations []model.CapitalGainInput) []*model.CapitalGainOutput
+}
+
 type (
-	TaxCalculation struct {
-		buyOperation  *BuyOperation
-		sellOperation *SellOperation
+	taxCalculation struct {
+		buyOperation  BuyOperation
+		sellOperation SellOperation
 	}
 )
 
-func NewTaxCalculation(buyOperation *BuyOperation, sellOperation *SellOperation) *TaxCalculation {
-	return &TaxCalculation{
+func NewTaxCalculation(buyOperation BuyOperation, sellOperation SellOperation) TaxCalculation {
+	return &taxCalculation{
 		buyOperation:  buyOperation,
 		sellOperation: sellOperation,
 	}
 }
 
-func (tc *TaxCalculation) Execute(operations []model.CapitalGainInput) []*model.CapitalGainOutput {
+func (tc *taxCalculation) Execute(operations []model.CapitalGainInput) []*model.CapitalGainOutput {
 	var taxes []*model.CapitalGainOutput
 	var tax *model.CapitalGainOutput
 	purchase := model.NewPurchase(0, 0)

@@ -1,8 +1,8 @@
 package usecase_test
 
 import (
-	"ganho-capital/internal/application/model"
-	"ganho-capital/internal/application/usecase"
+	"capital-gain/internal/application/model"
+	"capital-gain/internal/application/usecase"
 	"testing"
 )
 

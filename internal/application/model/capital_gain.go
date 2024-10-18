@@ -1,6 +1,8 @@
 package model
 
-import "ganho-capital/internal/application/util"
+import (
+	"capital-gain/internal/utils"
+)
 
 type (
 	CapitalGainInput struct {
@@ -32,7 +34,7 @@ func NewCapitalGainInput(operation OperationType, unitCost float64, quantity uin
 
 func NewCapitalGainOutput(gains float64) *CapitalGainOutput {
 	tax := gains * 0.2
-	formattedTax := util.RoundTwoDecimals(tax, 2)
+	formattedTax := utils.RoundTwoDecimals(tax, 2)
 	return &CapitalGainOutput{
 		Tax: &formattedTax,
 	}

@@ -1,16 +1,20 @@
 package usecase
 
 import (
-	"ganho-capital/internal/application/model"
+	"capital-gain/internal/application/model"
 )
 
-type SellOperation struct{}
-
-func NewSellOperation() *SellOperation {
-	return &SellOperation{}
+type SellOperation interface {
+	Execute(purchase *model.Purchase, sale *model.Sale, operation model.CapitalGainInput)
 }
 
-func (so *SellOperation) Execute(purchase *model.Purchase, sale *model.Sale, operation model.CapitalGainInput) {
+type sellOperation struct{}
+
+func NewSellOperation() SellOperation {
+	return &sellOperation{}
+}
+
+func (so *sellOperation) Execute(purchase *model.Purchase, sale *model.Sale, operation model.CapitalGainInput) {
 
 	if operation.UnitCost == purchase.AveragePrice {
 		sale.ProfitGains = 0

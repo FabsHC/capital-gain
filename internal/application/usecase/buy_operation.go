@@ -1,18 +1,22 @@
 package usecase
 
 import (
-	"ganho-capital/internal/application/model"
-	"ganho-capital/internal/application/util"
+	"capital-gain/internal/application/model"
+	"capital-gain/internal/utils"
 )
 
-type BuyOperation struct{}
-
-func NewBuyOperation() *BuyOperation {
-	return &BuyOperation{}
+type BuyOperation interface {
+	Execute(purchase *model.Purchase, operation model.CapitalGainInput)
 }
 
-func (bo *BuyOperation) Execute(purchase *model.Purchase, operation model.CapitalGainInput) {
-	purchase.AveragePrice = util.CalculateAveragePrice(
+type buyOperation struct{}
+
+func NewBuyOperation() BuyOperation {
+	return &buyOperation{}
+}
+
+func (bo *buyOperation) Execute(purchase *model.Purchase, operation model.CapitalGainInput) {
+	purchase.AveragePrice = utils.CalculateAveragePrice(
 		purchase.TotalShares,
 		operation.Quantity,
 		purchase.AveragePrice,
