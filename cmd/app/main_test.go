@@ -2,9 +2,8 @@ package main_test
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"ganho-capital/internal/application/model"
+	"github.com/stretchr/testify/assert"
 	"io"
 	"os"
 	"os/exec"
@@ -17,66 +16,60 @@ func TestUseCases(t *testing.T) {
 
 	t.Run("should read file resources/case_1 and validate output", func(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_1")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
+		assert.JSONEq(t,
+			`[{"tax": 0},{"tax": 0},{"tax": 0}]`,
+			string(stdout.Bytes()))
 	})
 
 	t.Run("should read file resource/case_2 and validate output", func(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_2")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
+		assert.JSONEq(t,
+			`[{"tax": 0.00},{"tax": 10000.00},{"tax": 0.00}]`,
+			string(stdout.Bytes()))
 	})
 
 	t.Run("should read file resource/case_3 and validate output", func(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_3")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
+		assert.JSONEq(t,
+			`[{"tax": 0.00},{"tax": 0.00},{"tax": 1000.00}]`,
+			string(stdout.Bytes()))
 	})
 
 	t.Run("should read file resource/case_4 and validate output", func(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_4")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
+		assert.JSONEq(t,
+			`[{"tax": 0},{"tax": 0},{"tax": 0}]`,
+			string(stdout.Bytes()))
 	})
 
 	t.Run("should read file resource/case_5 and validate output", func(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_5")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
+		assert.JSONEq(t,
+			`[{"tax": 0.00},{"tax": 0.00},{"tax": 0.00},{"tax": 10000.00}]`,
+			string(stdout.Bytes()))
 	})
 
 	t.Run("should read file resource/case_6 and validate output", func(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_6")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
+		assert.JSONEq(t,
+			`[{"tax": 0.00},{"tax": 0.00},{"tax": 0.00},{"tax": 0.00},{"tax": 3000.00}]`,
+			string(stdout.Bytes()))
 	})
 
 	t.Run("should read file resource/case_7 and validate output", func(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_7")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
+		assert.JSONEq(t,
+			`[{"tax":0.00}, {"tax":0.00}, {"tax":0.00}, 
+			 {"tax":0.00}, {"tax":3000.00}, {"tax":0.00}, 
+			 {"tax":0.00}, {"tax":3700.00}, {"tax":0.00}]`,
+			string(stdout.Bytes()))
 	})
 
 	t.Run("should read file resource/case_8 and validate output", func(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_8")
-		var capitalGainOutput []model.CapitalGainOutput
-		if err := json.Unmarshal(stdout.Bytes(), &capitalGainOutput); err != nil {
-			t.Error(err)
-		}
+		assert.JSONEq(t,
+			`[{"tax":0.00},{"tax":80000.00},{"tax":0.00},{"tax":60000.00}]`,
+			string(stdout.Bytes()))
 	})
 }
 
