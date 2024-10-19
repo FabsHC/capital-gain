@@ -11,6 +11,7 @@ import (
 	"testing"
 )
 
+// All the use cases are described here: docs/CASES.md
 func TestUseCases(t *testing.T) {
 	t.Parallel()
 
@@ -25,6 +26,13 @@ func TestUseCases(t *testing.T) {
 		stdout := emulateNewTerminalToReadFile("case_2")
 		assert.JSONEq(t,
 			`[{"tax": 0.00},{"tax": 10000.00},{"tax": 0.00}]`,
+			stdout.String())
+	})
+
+	t.Run("should read file resource/case_1+2 and validate output", func(t *testing.T) {
+		stdout := emulateNewTerminalToReadFile("case_1+2")
+		assert.Equal(t,
+			"[{\"tax\":0},{\"tax\":0},{\"tax\":0}]\n[{\"tax\":0},{\"tax\":10000},{\"tax\":0}]\n",
 			stdout.String())
 	})
 
