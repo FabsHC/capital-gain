@@ -1,5 +1,7 @@
 package models
 
+import "capital-gain/internal/utils"
+
 type (
 	Purchase struct {
 		AveragePrice float64
@@ -24,23 +26,29 @@ func (s *Sale) AddLosses(loss float64) {
 	s.Losses += loss
 }
 
-func (s *Sale) SubtractLosses(loss float64) {
-	s.Losses -= loss
-	if s.Losses < 0 {
-		s.Losses = 0
+func (s *Sale) SubtractLosses() {
+	if s.Gains > s.Losses {
+		s.Gains -= s.Losses
+		s.Losses -= s.Gains
+	} else {
+		s.Losses -= s.Gains
+		s.Gains = utils.ZERO
+	}
+	if s.Losses < utils.ZERO {
+		s.Losses = utils.ZERO
 	}
 }
 
-func NewPurchase(averagePrice float64, stocks uint) *Purchase {
+func NewPurchase() *Purchase {
 	return &Purchase{
-		AveragePrice: averagePrice,
-		Stocks:       stocks,
+		AveragePrice: utils.ZERO,
+		Stocks:       utils.ZERO,
 	}
 }
 
-func NewSale(losses, gains float64) *Sale {
+func NewSale() *Sale {
 	return &Sale{
-		Losses: losses,
-		Gains:  gains,
+		Losses: utils.ZERO,
+		Gains:  utils.ZERO,
 	}
 }
