@@ -52,7 +52,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install golangci-lint
-        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.61.0
+        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.61.0
+
+      - name: Check installation
+        run: golangci-lint --version
 
       - name: Linters
         run: golangci-lint run ./...
