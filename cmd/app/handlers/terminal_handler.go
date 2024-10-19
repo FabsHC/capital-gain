@@ -5,6 +5,7 @@ import (
 	"capital-gain/internal/models"
 	"capital-gain/internal/services"
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -31,11 +32,26 @@ func NewTerminalHandler(
 
 func (t terminalHandler) Execute() {
 	scanner := bufio.NewScanner(os.Stdin)
-	taxesCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
-	var capitalGainInput []models.CapitalGainInput
+	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
+
 	for scanner.Scan() {
-		_ = json.Unmarshal([]byte(scanner.Text()), &capitalGainInput)
-		capitalGainOutput := taxesCalculation.Execute(capitalGainInput)
-		_ = json.NewEncoder(os.Stdout).Encode(capitalGainOutput)
+		var capitalGainInputs []models.CapitalGainInput
+
+		err := json.Unmarshal([]byte(scanner.Text()), &capitalGainInputs)
+		if err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, "Fail to process input:", err)
+			continue
+		}
+
+		capitalGainOutputs := taxCalculation.Execute(capitalGainInputs)
+
+		err = json.NewEncoder(os.Stdout).Encode(capitalGainOutputs)
+		if err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, "Fail to generate output:", err)
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, "Fail to read input:", err)
 	}
 }

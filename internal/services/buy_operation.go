@@ -21,5 +21,6 @@ func (bo *buyOperation) Execute(purchase *models.Purchase, operation models.Capi
 		operation.Quantity,
 		purchase.AveragePrice,
 		operation.UnitCost)
+
 	purchase.AddShares(operation.Quantity)
 }
