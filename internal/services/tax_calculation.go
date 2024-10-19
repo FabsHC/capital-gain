@@ -35,10 +35,6 @@ func (tc *taxCalculation) Execute(operations []models.CapitalGainInput) []*model
 			tax = models.NewCapitalGainOutput(0)
 			break
 		case models.SELL_OPERATION:
-			if saleErr := sale.Validate(purchase.TotalShares, operation.Quantity); saleErr != nil {
-				tax = models.NewCapitalGainOutputError(saleErr.Error())
-				break
-			}
 			tc.sellOperation.Execute(purchase, sale, operation)
 			purchase.SubtractShares(operation.Quantity)
 			tax = models.NewCapitalGainOutput(sale.ProfitGains)

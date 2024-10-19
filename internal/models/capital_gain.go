@@ -39,9 +39,3 @@ func NewCapitalGainOutput(gains float64) *CapitalGainOutput {
 		Tax: &formattedTax,
 	}
 }
-
-func NewCapitalGainOutputError(errMessage string) *CapitalGainOutput {
-	return &CapitalGainOutput{
-		Err: &errMessage,
-	}
-}

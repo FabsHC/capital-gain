@@ -1,31 +1,25 @@
 package models
 
-import "errors"
-
 type (
 	Purchase struct {
 		AveragePrice float64
-		TotalShares  uint
+		Stock        uint
 	}
 
 	Sale struct {
 		TotalProfitLoss float64
 		ProfitGains     float64
 	}
-
-	SaleError struct {
-		Err string `json:"error"`
-	}
 )
 
 func (p *Purchase) AddShares(shares uint) {
-	p.TotalShares += shares
+	p.Stock += shares
 }
 
 func (p *Purchase) SubtractShares(shares uint) {
-	p.TotalShares -= shares
-	if p.TotalShares < 0 {
-		p.TotalShares = 0
+	p.Stock -= shares
+	if p.Stock < 0 {
+		p.Stock = 0
 	}
 }
 
@@ -40,18 +34,10 @@ func (s *Sale) SubtractProfitLoss(loss float64) {
 	}
 }
 
-func (s *Sale) Validate(totalShares, sharesToSell uint) error {
-	if sharesToSell > totalShares {
-		return errors.New("can't sell more stocks than you have")
-	}
-
-	return nil
-}
-
-func NewPurchase(averagePrice float64, totalShares uint) *Purchase {
+func NewPurchase(averagePrice float64, stocks uint) *Purchase {
 	return &Purchase{
 		AveragePrice: averagePrice,
-		TotalShares:  totalShares,
+		Stock:        stocks,
 	}
 }
 
@@ -59,11 +45,5 @@ func NewSale(totalProfitLoss, profitGains float64) *Sale {
 	return &Sale{
 		TotalProfitLoss: totalProfitLoss,
 		ProfitGains:     profitGains,
-	}
-}
-
-func NewSaleError(err string) *SaleError {
-	return &SaleError{
-		Err: err,
 	}
 }
