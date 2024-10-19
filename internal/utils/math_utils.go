@@ -2,7 +2,7 @@ package utils
 
 import "math"
 
-func CalculateAveragePrice(totalStocks, stocksPurchased uint, actualAveragePrice, purchasePrice float64) float64 {
+func CalculateAverageSharePrice(totalStocks, stocksPurchased uint, actualAveragePrice, purchasePrice float64) float64 {
 	totalStocksFloat := float64(totalStocks)
 	stocksPurchasedFloat := float64(stocksPurchased)
 	average := ((totalStocksFloat * actualAveragePrice) + (stocksPurchasedFloat * purchasePrice)) / (totalStocksFloat + stocksPurchasedFloat)

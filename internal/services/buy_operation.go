@@ -16,8 +16,8 @@ func NewBuyOperation() BuyOperation {
 }
 
 func (bo *buyOperation) Execute(purchase *models.Purchase, operation models.CapitalGainInput) {
-	purchase.AveragePrice = utils.CalculateAveragePrice(
-		purchase.Stock,
+	purchase.AveragePrice = utils.CalculateAverageSharePrice(
+		purchase.Stocks,
 		operation.Quantity,
 		purchase.AveragePrice,
 		operation.UnitCost)
