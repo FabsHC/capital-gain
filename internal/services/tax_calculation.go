@@ -1,11 +1,11 @@
-package usecase
+package services
 
 import (
-	"capital-gain/internal/application/model"
+	"capital-gain/internal/models"
 )
 
 type TaxCalculation interface {
-	Execute(operations []model.CapitalGainInput) []*model.CapitalGainOutput
+	Execute(operations []models.CapitalGainInput) []*models.CapitalGainOutput
 }
 
 type (
@@ -22,26 +22,26 @@ func NewTaxCalculation(buyOperation BuyOperation, sellOperation SellOperation) T
 	}
 }
 
-func (tc *taxCalculation) Execute(operations []model.CapitalGainInput) []*model.CapitalGainOutput {
-	var taxes []*model.CapitalGainOutput
-	var tax *model.CapitalGainOutput
-	purchase := model.NewPurchase(0, 0)
-	sale := model.NewSale(0, 0)
+func (tc *taxCalculation) Execute(operations []models.CapitalGainInput) []*models.CapitalGainOutput {
+	var taxes []*models.CapitalGainOutput
+	var tax *models.CapitalGainOutput
+	purchase := models.NewPurchase(0, 0)
+	sale := models.NewSale(0, 0)
 
 	for _, operation := range operations {
 		switch operation.Operation {
-		case model.BUY_OPERATION:
+		case models.BUY_OPERATION:
 			tc.buyOperation.Execute(purchase, operation)
-			tax = model.NewCapitalGainOutput(0)
+			tax = models.NewCapitalGainOutput(0)
 			break
-		case model.SELL_OPERATION:
+		case models.SELL_OPERATION:
 			if saleErr := sale.Validate(purchase.TotalShares, operation.Quantity); saleErr != nil {
-				tax = model.NewCapitalGainOutputError(saleErr.Error())
+				tax = models.NewCapitalGainOutputError(saleErr.Error())
 				break
 			}
 			tc.sellOperation.Execute(purchase, sale, operation)
 			purchase.SubtractShares(operation.Quantity)
-			tax = model.NewCapitalGainOutput(sale.ProfitGains)
+			tax = models.NewCapitalGainOutput(sale.ProfitGains)
 			break
 		}
 		taxes = append(taxes, tax)

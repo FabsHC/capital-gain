@@ -1,17 +1,19 @@
 package config
 
-import "capital-gain/internal/application/usecase"
+import (
+	"capital-gain/internal/services"
+)
 
 type Register struct {
-	BuyOperation   usecase.BuyOperation
-	SellOperation  usecase.SellOperation
-	TaxCalculation usecase.TaxCalculation
+	BuyOperation   services.BuyOperation
+	SellOperation  services.SellOperation
+	TaxCalculation services.TaxCalculation
 }
 
 func NewRegister() *Register {
-	buyOperation := usecase.NewBuyOperation()
-	sellOperation := usecase.NewSellOperation()
-	taxCalculation := usecase.NewTaxCalculation(buyOperation, sellOperation)
+	buyOperation := services.NewBuyOperation()
+	sellOperation := services.NewSellOperation()
+	taxCalculation := services.NewTaxCalculation(buyOperation, sellOperation)
 	return &Register{
 		BuyOperation:   buyOperation,
 		SellOperation:  sellOperation,

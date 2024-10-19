@@ -1,11 +1,11 @@
-package usecase
+package services
 
 import (
-	"capital-gain/internal/application/model"
+	"capital-gain/internal/models"
 )
 
 type SellOperation interface {
-	Execute(purchase *model.Purchase, sale *model.Sale, operation model.CapitalGainInput)
+	Execute(purchase *models.Purchase, sale *models.Sale, operation models.CapitalGainInput)
 }
 
 type sellOperation struct{}
@@ -14,7 +14,7 @@ func NewSellOperation() SellOperation {
 	return &sellOperation{}
 }
 
-func (so *sellOperation) Execute(purchase *model.Purchase, sale *model.Sale, operation model.CapitalGainInput) {
+func (so *sellOperation) Execute(purchase *models.Purchase, sale *models.Sale, operation models.CapitalGainInput) {
 
 	if operation.UnitCost == purchase.AveragePrice {
 		sale.ProfitGains = 0

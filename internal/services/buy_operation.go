@@ -1,12 +1,12 @@
-package usecase
+package services
 
 import (
-	"capital-gain/internal/application/model"
+	"capital-gain/internal/models"
 	"capital-gain/internal/utils"
 )
 
 type BuyOperation interface {
-	Execute(purchase *model.Purchase, operation model.CapitalGainInput)
+	Execute(purchase *models.Purchase, operation models.CapitalGainInput)
 }
 
 type buyOperation struct{}
@@ -15,7 +15,7 @@ func NewBuyOperation() BuyOperation {
 	return &buyOperation{}
 }
 
-func (bo *buyOperation) Execute(purchase *model.Purchase, operation model.CapitalGainInput) {
+func (bo *buyOperation) Execute(purchase *models.Purchase, operation models.CapitalGainInput) {
 	purchase.AveragePrice = utils.CalculateAveragePrice(
 		purchase.TotalShares,
 		operation.Quantity,

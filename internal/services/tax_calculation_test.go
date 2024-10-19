@@ -1,19 +1,19 @@
-package usecase_test
+package services_test
 
 import (
-	"capital-gain/internal/application/model"
-	"capital-gain/internal/application/usecase"
+	"capital-gain/internal/models"
+	"capital-gain/internal/services"
 	"testing"
 )
 
 func TestShouldNotPayTaxesNoProfitLossesOrGains(t *testing.T) {
-	buyOperation := model.NewCapitalGainInput(model.BUY_OPERATION, 10, 100)
-	sellOperation := model.NewCapitalGainInput(model.SELL_OPERATION, 10, 100)
-	var input []model.CapitalGainInput
+	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
+	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 10, 100)
+	var input []models.CapitalGainInput
 	input = append(input, *buyOperation)
 	input = append(input, *sellOperation)
 
-	taxCalculation := usecase.NewTaxCalculation(usecase.NewBuyOperation(), usecase.NewSellOperation())
+	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
 
 	outputList := taxCalculation.Execute(input)
 	if *outputList[0].Tax > 0 {
@@ -25,13 +25,13 @@ func TestShouldNotPayTaxesNoProfitLossesOrGains(t *testing.T) {
 }
 
 func TestShouldNotPayTaxesBecauseProfitLosses(t *testing.T) {
-	buyOperation := model.NewCapitalGainInput(model.BUY_OPERATION, 10, 100)
-	sellOperation := model.NewCapitalGainInput(model.SELL_OPERATION, 3, 100)
-	var input []model.CapitalGainInput
+	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
+	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 3, 100)
+	var input []models.CapitalGainInput
 	input = append(input, *buyOperation)
 	input = append(input, *sellOperation)
 
-	taxCalculation := usecase.NewTaxCalculation(usecase.NewBuyOperation(), usecase.NewSellOperation())
+	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
 
 	outputList := taxCalculation.Execute(input)
 	if *outputList[0].Tax > 0 {
@@ -43,13 +43,13 @@ func TestShouldNotPayTaxesBecauseProfitLosses(t *testing.T) {
 }
 
 func TestShouldNotPayTaxesBecauseSellOperationValueLowerThan20000(t *testing.T) {
-	buyOperation := model.NewCapitalGainInput(model.BUY_OPERATION, 10, 100)
-	sellOperation := model.NewCapitalGainInput(model.SELL_OPERATION, 15, 30)
-	var input []model.CapitalGainInput
+	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
+	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 15, 30)
+	var input []models.CapitalGainInput
 	input = append(input, *buyOperation)
 	input = append(input, *sellOperation)
 
-	taxCalculation := usecase.NewTaxCalculation(usecase.NewBuyOperation(), usecase.NewSellOperation())
+	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
 
 	outputList := taxCalculation.Execute(input)
 	if *outputList[0].Tax > 0 {
@@ -61,13 +61,13 @@ func TestShouldNotPayTaxesBecauseSellOperationValueLowerThan20000(t *testing.T) 
 }
 
 func TestShouldPayTaxesBecauseSellOperationValueBiggerThan20000(t *testing.T) {
-	buyOperation := model.NewCapitalGainInput(model.BUY_OPERATION, 10, 100)
-	sellOperation := model.NewCapitalGainInput(model.SELL_OPERATION, 350, 100)
-	var input []model.CapitalGainInput
+	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
+	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 350, 100)
+	var input []models.CapitalGainInput
 	input = append(input, *buyOperation)
 	input = append(input, *sellOperation)
 
-	taxCalculation := usecase.NewTaxCalculation(usecase.NewBuyOperation(), usecase.NewSellOperation())
+	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
 
 	outputList := taxCalculation.Execute(input)
 	if *outputList[0].Tax > 0 {
@@ -79,17 +79,17 @@ func TestShouldPayTaxesBecauseSellOperationValueBiggerThan20000(t *testing.T) {
 }
 
 func TestShouldNotPayTaxesBecauseSellOperationsWillGenerateLossesAndThenProfitsToCoverTheLosses(t *testing.T) {
-	buyOperation := model.NewCapitalGainInput(model.BUY_OPERATION, 10, 10000)
-	sellOperation := model.NewCapitalGainInput(model.SELL_OPERATION, 2, 5000)
-	var input []model.CapitalGainInput
+	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 10000)
+	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 2, 5000)
+	var input []models.CapitalGainInput
 	input = append(input, *buyOperation)
 	input = append(input, *sellOperation)
-	sellOperation = model.NewCapitalGainInput(model.SELL_OPERATION, 20, 2000)
+	sellOperation = models.NewCapitalGainInput(models.SELL_OPERATION, 20, 2000)
 	input = append(input, *sellOperation)
-	sellOperation = model.NewCapitalGainInput(model.SELL_OPERATION, 20, 2000)
+	sellOperation = models.NewCapitalGainInput(models.SELL_OPERATION, 20, 2000)
 	input = append(input, *sellOperation)
 
-	taxCalculation := usecase.NewTaxCalculation(usecase.NewBuyOperation(), usecase.NewSellOperation())
+	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
 
 	outputList := taxCalculation.Execute(input)
 	if *outputList[0].Tax > 0 {
@@ -107,13 +107,13 @@ func TestShouldNotPayTaxesBecauseSellOperationsWillGenerateLossesAndThenProfitsT
 }
 
 func TestShouldReturnTaxError(t *testing.T) {
-	buyOperation := model.NewCapitalGainInput(model.BUY_OPERATION, 10, 10000)
-	sellOperation := model.NewCapitalGainInput(model.SELL_OPERATION, 20, 11000)
-	var input []model.CapitalGainInput
+	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 10000)
+	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 20, 11000)
+	var input []models.CapitalGainInput
 	input = append(input, *buyOperation)
 	input = append(input, *sellOperation)
 
-	taxCalculation := usecase.NewTaxCalculation(usecase.NewBuyOperation(), usecase.NewSellOperation())
+	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
 	output := taxCalculation.Execute(input)
 
 	if output[0].Tax == nil {
