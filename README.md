@@ -1,6 +1,7 @@
 # Capital Gain
 ![capital-gain](https://img.shields.io/badge/capital--gain-gray?logo=go)
 ![technology Go 1.22](https://img.shields.io/badge/technology-go%201.22-blue.svg)
+![Build & Test](https://github.com/FabsHC/capital-gain/actions/workflows/go.yml/badge.svg)
 [![Go Coverage](https://github.com/FabsHC/capital-gain/wiki/coverage.svg)](https://raw.githack.com/wiki/FabsHC/capital-gain/coverage.html)
 
 This project simulates the purchase and sale of shares. It does not use any database, all data is stored in memory during the execution of a list of operations.
