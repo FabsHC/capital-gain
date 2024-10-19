@@ -33,12 +33,10 @@ func (tc *taxCalculation) Execute(operations []models.CapitalGainInput) []*model
 		case models.BUY_OPERATION:
 			tc.buyOperation.Execute(purchase, operation)
 			tax = models.NewCapitalGainOutput(0)
-			break
 		case models.SELL_OPERATION:
 			tc.sellOperation.Execute(purchase, sale, operation)
 			purchase.SubtractShares(operation.Quantity)
 			tax = models.NewCapitalGainOutput(sale.ProfitGains)
-			break
 		}
 		taxes = append(taxes, tax)
 		tax = nil

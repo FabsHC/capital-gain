@@ -18,9 +18,6 @@ func (p *Purchase) AddShares(shares uint) {
 
 func (p *Purchase) SubtractShares(shares uint) {
 	p.Stock -= shares
-	if p.Stock < 0 {
-		p.Stock = 0
-	}
 }
 
 func (s *Sale) AddProfitLoss(loss float64) {
