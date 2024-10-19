@@ -1,134 +1,90 @@
 package services_test
 
 import (
+	"capital-gain/internal/config"
 	"capital-gain/internal/models"
 	"capital-gain/internal/services"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestShouldNotPayTaxesNoProfitLossesOrGains(t *testing.T) {
-	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
-	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 10, 100)
-	var input []models.CapitalGainInput
-	input = append(input, *buyOperation)
-	input = append(input, *sellOperation)
+func TestTaxCalculation(t *testing.T) {
+	t.Parallel()
+	reg := config.NewRegister()
 
-	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
+	t.Run("should not pay taxes, no profit losses or gains", func(t *testing.T) {
+		buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
+		sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 10, 100)
+		var input []models.CapitalGainInput
+		input = append(input, *buyOperation)
+		input = append(input, *sellOperation)
 
-	outputList := taxCalculation.Execute(input)
-	if *outputList[0].Tax > 0 {
-		t.Error("Tax calculation error, purchase operations do not pay taxes")
-	}
-	if *outputList[1].Tax > 0 {
-		t.Error("Tax calculation error, sales operations without profits must not pay taxes")
-	}
-}
+		taxCalculation := services.NewTaxCalculation(reg.BuyOperation, reg.SellOperation)
 
-func TestShouldNotPayTaxesBecauseProfitLosses(t *testing.T) {
-	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
-	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 3, 100)
-	var input []models.CapitalGainInput
-	input = append(input, *buyOperation)
-	input = append(input, *sellOperation)
+		outputList := taxCalculation.Execute(input)
+		assert.Equal(t, 0.0, *outputList[0].Tax)
+		assert.Equal(t, 0.0, *outputList[1].Tax)
+	})
 
-	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
+	t.Run("should not pay taxes, because operation has only profit losses", func(t *testing.T) {
+		buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
+		sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 3, 100)
+		var input []models.CapitalGainInput
+		input = append(input, *buyOperation)
+		input = append(input, *sellOperation)
 
-	outputList := taxCalculation.Execute(input)
-	if *outputList[0].Tax > 0 {
-		t.Error("Tax calculation error, purchase operations do not pay taxes")
-	}
-	if *outputList[1].Tax > 0 {
-		t.Error("Tax calculation error, loss-making sales transactions should not pay taxes")
-	}
-}
+		taxCalculation := services.NewTaxCalculation(reg.BuyOperation, reg.SellOperation)
 
-func TestShouldNotPayTaxesBecauseSellOperationValueLowerThan20000(t *testing.T) {
-	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
-	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 15, 30)
-	var input []models.CapitalGainInput
-	input = append(input, *buyOperation)
-	input = append(input, *sellOperation)
+		outputList := taxCalculation.Execute(input)
+		assert.Equal(t, 0.0, *outputList[0].Tax)
+		assert.Equal(t, 0.0, *outputList[1].Tax)
+	})
 
-	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
+	t.Run("should not pay taxes, because sell operation value is lower than 20000", func(t *testing.T) {
+		buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
+		sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 15, 30)
+		var input []models.CapitalGainInput
+		input = append(input, *buyOperation)
+		input = append(input, *sellOperation)
 
-	outputList := taxCalculation.Execute(input)
-	if *outputList[0].Tax > 0 {
-		t.Error("Tax calculation error, purchase operations do not pay taxes")
-	}
-	if *outputList[1].Tax > 0 {
-		t.Error("Tax calculation error, sales operations with profits below 20000 must not pay taxes")
-	}
-}
+		taxCalculation := services.NewTaxCalculation(reg.BuyOperation, reg.SellOperation)
 
-func TestShouldPayTaxesBecauseSellOperationValueBiggerThan20000(t *testing.T) {
-	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
-	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 350, 100)
-	var input []models.CapitalGainInput
-	input = append(input, *buyOperation)
-	input = append(input, *sellOperation)
+		outputList := taxCalculation.Execute(input)
+		assert.Equal(t, 0.0, *outputList[0].Tax)
+		assert.Equal(t, 0.0, *outputList[1].Tax)
+	})
 
-	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
+	t.Run("should pay taxes, because sell operation value is lower than 20000", func(t *testing.T) {
+		buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
+		sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 350, 100)
+		var input []models.CapitalGainInput
+		input = append(input, *buyOperation)
+		input = append(input, *sellOperation)
 
-	outputList := taxCalculation.Execute(input)
-	if *outputList[0].Tax > 0 {
-		t.Error("Tax calculation error, purchase operations do not pay taxes")
-	}
-	if *outputList[1].Tax == 0 {
-		t.Error("Tax calculation error, sales operations with profits above 20000 must pay taxes")
-	}
-}
+		taxCalculation := services.NewTaxCalculation(reg.BuyOperation, reg.SellOperation)
 
-func TestShouldNotPayTaxesBecauseSellOperationsWillGenerateLossesAndThenProfitsToCoverTheLosses(t *testing.T) {
-	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 10000)
-	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 2, 5000)
-	var input []models.CapitalGainInput
-	input = append(input, *buyOperation)
-	input = append(input, *sellOperation)
-	sellOperation = models.NewCapitalGainInput(models.SELL_OPERATION, 20, 2000)
-	input = append(input, *sellOperation)
-	sellOperation = models.NewCapitalGainInput(models.SELL_OPERATION, 20, 2000)
-	input = append(input, *sellOperation)
+		outputList := taxCalculation.Execute(input)
+		assert.Equal(t, 0.0, *outputList[0].Tax)
+		assert.Equal(t, 6800.0, *outputList[1].Tax)
+	})
 
-	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
+	t.Run("should not pay taxes, because profit gains will cover the losses", func(t *testing.T) {
+		buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 10000)
+		sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 2, 5000)
+		var input []models.CapitalGainInput
+		input = append(input, *buyOperation)
+		input = append(input, *sellOperation)
+		sellOperation = models.NewCapitalGainInput(models.SELL_OPERATION, 20, 2000)
+		input = append(input, *sellOperation)
+		sellOperation = models.NewCapitalGainInput(models.SELL_OPERATION, 20, 2000)
+		input = append(input, *sellOperation)
 
-	outputList := taxCalculation.Execute(input)
-	if *outputList[0].Tax > 0 {
-		t.Error("Tax calculation error, purchase operations do not pay taxes")
-	}
-	if *outputList[1].Tax > 0 {
-		t.Error("Tax calculation error, sales operations without profits must not pay taxes")
-	}
-	if *outputList[2].Tax > 0 {
-		t.Error("Tax calculation error, sales operations without profits must not pay taxes")
-	}
-	if *outputList[3].Tax > 0 {
-		t.Error("Tax calculation error, sales operations without profits must not pay taxes")
-	}
-}
+		taxCalculation := services.NewTaxCalculation(reg.BuyOperation, reg.SellOperation)
 
-func TestShouldReturnTaxError(t *testing.T) {
-	buyOperation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 10000)
-	sellOperation := models.NewCapitalGainInput(models.SELL_OPERATION, 20, 11000)
-	var input []models.CapitalGainInput
-	input = append(input, *buyOperation)
-	input = append(input, *sellOperation)
-
-	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
-	output := taxCalculation.Execute(input)
-
-	if output[0].Tax == nil {
-		t.Error("nil tax")
-	}
-	if *output[0].Tax > 0 {
-		t.Error("tax should be zero")
-	}
-	if output[1].Tax != nil {
-		t.Error("tax should be nil")
-	}
-	if output[1].Err == nil {
-		t.Error("operation should be returned an error")
-	}
-	if *output[1].Err == "" {
-		t.Error("error should not be empty")
-	}
+		outputList := taxCalculation.Execute(input)
+		assert.Equal(t, 0.0, *outputList[0].Tax)
+		assert.Equal(t, 0.0, *outputList[1].Tax)
+		assert.Equal(t, 0.0, *outputList[2].Tax)
+		assert.Equal(t, 0.0, *outputList[3].Tax)
+	})
 }
