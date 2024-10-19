@@ -1,4 +1,4 @@
-name: gocoverage
+name: Coverage
 
 on:
   push:
