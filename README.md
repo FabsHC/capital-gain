@@ -77,3 +77,12 @@ make -f Makefile test-docker
 ```shell
 make -f Makefile test
 ```
+
+## Lint and Coverage
+The commands bellow need `gotestsum` and `golangci-lint` installed
+```shell
+make -f Makefile lint
+```
+```shell
+make -f Makefile cover
+```
