@@ -23,8 +23,10 @@ func NewTaxCalculation(buyOperation BuyOperation, sellOperation SellOperation) T
 }
 
 func (tc *taxCalculation) Execute(operations []models.CapitalGainInput) []*models.CapitalGainOutput {
-	var taxes []*models.CapitalGainOutput
-	var tax *models.CapitalGainOutput
+	var (
+		taxes []*models.CapitalGainOutput
+		tax   *models.CapitalGainOutput
+	)
 	purchase := models.NewPurchase(0, 0)
 	sale := models.NewSale(0, 0)
 
@@ -39,7 +41,6 @@ func (tc *taxCalculation) Execute(operations []models.CapitalGainInput) []*model
 			tax = models.NewCapitalGainOutput(sale.Gains)
 		}
 		taxes = append(taxes, tax)
-		tax = nil
 	}
 	return taxes
 }
