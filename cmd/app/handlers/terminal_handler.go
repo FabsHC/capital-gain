@@ -5,7 +5,6 @@ import (
 	"capital-gain/internal/models"
 	"capital-gain/internal/services"
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 )
@@ -38,21 +37,11 @@ func (t terminalHandler) Execute(reader io.Reader) {
 	for scanner.Scan() {
 		var capitalGainInputs []models.CapitalGainInput
 
-		err := json.Unmarshal([]byte(scanner.Text()), &capitalGainInputs)
-		if err != nil {
-			_, _ = fmt.Fprintln(os.Stderr, "Fail to process input:", err)
-			continue
-		}
+		_ = json.Unmarshal([]byte(scanner.Text()), &capitalGainInputs)
 
 		capitalGainOutputs := taxCalculation.Execute(capitalGainInputs)
 
-		err = json.NewEncoder(os.Stdout).Encode(capitalGainOutputs)
-		if err != nil {
-			_, _ = fmt.Fprintln(os.Stderr, "Fail to generate output:", err)
-		}
+		_ = json.NewEncoder(os.Stdout).Encode(capitalGainOutputs)
 	}
 
-	if err := scanner.Err(); err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, "Fail to read input:", err)
-	}
 }
