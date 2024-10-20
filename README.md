@@ -81,10 +81,13 @@ make -f Makefile test
 ```
 
 ## Lint and Coverage
-The commands bellow need `gotestsum` and `golangci-lint` installed
+The commands bellow need `gotestsum`, `golangci-lint` and `mockgen` installed
 ```shell
 make -f Makefile lint
 ```
 ```shell
 make -f Makefile cover
+```
+```shell
+make -f Makefile mock
 ```
