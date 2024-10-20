@@ -26,6 +26,7 @@ func TestHandler(t *testing.T) {
 		os.Stdout = writer
 
 		handler.Execute(inputReader)
+		writer.Close()
 
 		out, err := io.ReadAll(reader)
 		assert.Nil(t, err)
