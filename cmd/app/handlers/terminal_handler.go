@@ -6,11 +6,12 @@ import (
 	"capital-gain/internal/services"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 )
 
 type TerminalHandler interface {
-	Execute()
+	Execute(reader io.Reader)
 }
 
 type terminalHandler struct {
@@ -30,8 +31,8 @@ func NewTerminalHandler(
 	}
 }
 
-func (t terminalHandler) Execute() {
-	scanner := bufio.NewScanner(os.Stdin)
+func (t terminalHandler) Execute(reader io.Reader) {
+	scanner := bufio.NewScanner(reader)
 	taxCalculation := services.NewTaxCalculation(services.NewBuyOperation(), services.NewSellOperation())
 
 	for scanner.Scan() {
