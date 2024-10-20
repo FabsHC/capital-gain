@@ -32,9 +32,6 @@ func TestHandler(t *testing.T) {
 		out, err := io.ReadAll(reader)
 		assert.Nil(t, err)
 
-		err = os.Stdout.Close()
-		assert.Nil(t, err)
-
 		var capitalGainOutputs []models.CapitalGainOutput
 		err = json.Unmarshal(out, &capitalGainOutputs)
 		assert.Nil(t, err)
