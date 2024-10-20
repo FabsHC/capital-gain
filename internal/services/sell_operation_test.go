@@ -13,8 +13,8 @@ func TestSellOperation(t *testing.T) {
 	sellOperation := services.NewSellOperation()
 
 	t.Run("should execute sell operation and do not have any gains/losses because average price is same as selling price", func(t *testing.T) {
-		purchase := models.NewPurchase()
-		sale := models.NewSale()
+		purchase := models.NewStocksInfo()
+		sale := models.NewProfit()
 		operation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
 
 		buyOperation.Execute(purchase, *operation)
@@ -27,8 +27,8 @@ func TestSellOperation(t *testing.T) {
 	})
 
 	t.Run("should execute sell operation and have losses because selling price is bellow average price", func(t *testing.T) {
-		purchase := models.NewPurchase()
-		sale := models.NewSale()
+		purchase := models.NewStocksInfo()
+		sale := models.NewProfit()
 		operation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
 
 		buyOperation.Execute(purchase, *operation)
@@ -41,8 +41,8 @@ func TestSellOperation(t *testing.T) {
 	})
 
 	t.Run("should execute sell operation and have gains because selling price is higher than average price", func(t *testing.T) {
-		purchase := models.NewPurchase()
-		sale := models.NewSale()
+		purchase := models.NewStocksInfo()
+		sale := models.NewProfit()
 		operation := models.NewCapitalGainInput(models.BUY_OPERATION, 10, 100)
 
 		buyOperation.Execute(purchase, *operation)

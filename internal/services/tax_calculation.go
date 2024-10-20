@@ -25,21 +25,20 @@ func NewTaxCalculation(buyOperation BuyOperation, sellOperation SellOperation) T
 
 func (tc *taxCalculation) Execute(operations []models.CapitalGainInput) []*models.CapitalGainOutput {
 	var taxes []*models.CapitalGainOutput
-	purchase := models.NewPurchase()
-	sale := models.NewSale()
+	stocksInfo := models.NewStocksInfo()
+	profit := models.NewProfit()
 
 	for _, operation := range operations {
 		var tax *models.CapitalGainOutput
 
 		switch operation.Operation {
 		case models.BUY_OPERATION:
-			tc.buyOperation.Execute(purchase, operation)
+			tc.buyOperation.Execute(stocksInfo, operation)
 			tax = models.NewCapitalGainOutput(utils.ZERO)
 
 		case models.SELL_OPERATION:
-			tc.sellOperation.Execute(purchase, sale, operation)
-			purchase.SubtractShares(operation.Quantity)
-			tax = models.NewCapitalGainOutput(getSalesGains(sale, operation))
+			tc.sellOperation.Execute(stocksInfo, profit, operation)
+			tax = models.NewCapitalGainOutput(getSalesGains(profit, operation))
 		}
 
 		taxes = append(taxes, tax)
@@ -48,7 +47,7 @@ func (tc *taxCalculation) Execute(operations []models.CapitalGainInput) []*model
 	return taxes
 }
 
-func getSalesGains(sale *models.Sale, operation models.CapitalGainInput) float64 {
+func getSalesGains(sale *models.Profit, operation models.CapitalGainInput) float64 {
 	if operation.GetTotalCost(operation.UnitCost) <= 20000 {
 		return utils.ZERO
 	}

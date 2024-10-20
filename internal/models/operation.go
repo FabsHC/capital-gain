@@ -3,51 +3,59 @@ package models
 import "capital-gain/internal/utils"
 
 type (
-	Purchase struct {
+	StocksInfo struct {
 		AveragePrice float64
-		Stocks       uint
+		Shares       uint
 	}
 
-	Sale struct {
+	Profit struct {
 		Losses float64
 		Gains  float64
 	}
 )
 
-func (p *Purchase) AddShares(shares uint) {
-	p.Stocks += shares
+func (s *StocksInfo) AddShares(shares uint) {
+	s.Shares += shares
 }
 
-func (p *Purchase) SubtractShares(shares uint) {
-	p.Stocks -= shares
+func (s *StocksInfo) SubtractShares(shares uint) {
+	s.Shares -= shares
 }
 
-func (s *Sale) AddLosses(loss float64) {
-	s.Losses += loss
+func (s *StocksInfo) CalculateNewAverageSharePrice(operation CapitalGainInput) {
+	s.AveragePrice = utils.CalculateAverageSharePrice(
+		s.Shares,
+		operation.Quantity,
+		s.AveragePrice,
+		operation.UnitCost)
 }
 
-func (s *Sale) SubtractLosses() {
-	if s.Gains > s.Losses {
-		s.Gains -= s.Losses
-		s.Losses -= s.Gains
+func (p *Profit) AddLosses(loss float64) {
+	p.Losses += loss
+}
+
+func (p *Profit) SubtractLosses() {
+	if p.Gains > p.Losses {
+		p.Gains -= p.Losses
+		p.Losses -= p.Gains
 	} else {
-		s.Losses -= s.Gains
-		s.Gains = utils.ZERO
+		p.Losses -= p.Gains
+		p.Gains = utils.ZERO
 	}
-	if s.Losses < utils.ZERO {
-		s.Losses = utils.ZERO
+	if p.Losses < utils.ZERO {
+		p.Losses = utils.ZERO
 	}
 }
 
-func NewPurchase() *Purchase {
-	return &Purchase{
+func NewStocksInfo() *StocksInfo {
+	return &StocksInfo{
 		AveragePrice: utils.ZERO,
-		Stocks:       utils.ZERO,
+		Shares:       utils.ZERO,
 	}
 }
 
-func NewSale() *Sale {
-	return &Sale{
+func NewProfit() *Profit {
+	return &Profit{
 		Losses: utils.ZERO,
 		Gains:  utils.ZERO,
 	}

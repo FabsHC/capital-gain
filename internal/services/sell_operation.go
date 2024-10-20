@@ -6,7 +6,7 @@ import (
 )
 
 type SellOperation interface {
-	Execute(purchase *models.Purchase, sale *models.Sale, operation models.CapitalGainInput)
+	Execute(purchase *models.StocksInfo, sale *models.Profit, operation models.CapitalGainInput)
 }
 
 type sellOperation struct{}
@@ -15,21 +15,22 @@ func NewSellOperation() SellOperation {
 	return &sellOperation{}
 }
 
-func (so *sellOperation) Execute(purchase *models.Purchase, sale *models.Sale, operation models.CapitalGainInput) {
+func (so *sellOperation) Execute(stocksInfo *models.StocksInfo, profit *models.Profit, operation models.CapitalGainInput) {
 	unitCostTotal := operation.GetTotalCost(operation.UnitCost)
-	averagePriceTotal := operation.GetTotalCost(purchase.AveragePrice)
+	averagePriceTotal := operation.GetTotalCost(stocksInfo.AveragePrice)
+	stocksInfo.SubtractShares(operation.Quantity)
 
-	if operation.UnitCost == purchase.AveragePrice {
-		sale.Gains = utils.ZERO
+	if operation.UnitCost == stocksInfo.AveragePrice {
+		profit.Gains = utils.ZERO
 		return
 	}
 
-	if operation.UnitCost < purchase.AveragePrice {
-		sale.AddLosses(averagePriceTotal - unitCostTotal)
-		sale.Gains = utils.ZERO
+	if operation.UnitCost < stocksInfo.AveragePrice {
+		profit.AddLosses(averagePriceTotal - unitCostTotal)
+		profit.Gains = utils.ZERO
 		return
 	}
 
-	sale.Gains = unitCostTotal - averagePriceTotal
-	sale.SubtractLosses()
+	profit.Gains = unitCostTotal - averagePriceTotal
+	profit.SubtractLosses()
 }
