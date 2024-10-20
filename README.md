@@ -30,7 +30,7 @@ In the [resources](resources) folder we have several examples to run the applica
 In the [CASES.md](docs/CASES.md) we are detailing these examples.
 
 ## Technology
-The technology used is the Go language in version 1.20.3.
+The technology used is the Go language in version 1.22.
 
 ## Project Organization
 ```
