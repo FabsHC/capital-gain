@@ -43,6 +43,7 @@ The technology used is the Go language in version 1.20.3.
 │   ├── /models.................: Contains Data structure
 │   ├── /services...............: Contains all business validation
 │   └── /utils..................: General stuff
+├── /mock.......................: Mock files for unit tests
 
 ```
 
