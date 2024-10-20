@@ -23,10 +23,12 @@ func TestHandler(t *testing.T) {
 
 		reader, writer, err := os.Pipe()
 		assert.Nil(t, err)
+		originalStdout := os.Stdout
 		os.Stdout = writer
 
 		handler.Execute(inputReader)
-		writer.Close()
+		err = writer.Close()
+		assert.Nil(t, err)
 
 		out, err := io.ReadAll(reader)
 		assert.Nil(t, err)
@@ -38,5 +40,7 @@ func TestHandler(t *testing.T) {
 		assert.Equal(t, 2, len(capitalGainOutputs))
 		assert.Equal(t, 0.0, *capitalGainOutputs[0].Tax)
 		assert.Equal(t, 0.0, *capitalGainOutputs[1].Tax)
+
+		os.Stdout = originalStdout
 	})
 }
