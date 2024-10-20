@@ -9,8 +9,3 @@ test-docker:
 
 lint:
 	golangci-lint run --fix
-
-cover:
-	gotestsum --format pkgname ./... -coverprofile=coverage.out -coverpkg=./... && \
-	grep -v mock coverage.out > tmpcoverage && mv tmpcoverage coverage.out && \
-	go tool cover -html=coverage.out -o coverage.html
