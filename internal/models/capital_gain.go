@@ -13,7 +13,6 @@ type (
 
 	CapitalGainOutput struct {
 		Tax *float64 `json:"tax,omitempty"`
-		Err *string  `json:"err,omitempty"`
 	}
 
 	OperationType string
