@@ -15,9 +15,9 @@ import (
 func TestHandler(t *testing.T) {
 	t.Parallel()
 	reg := config.NewRegister()
-	handler := handlers.NewTerminalHandler(reg.BuyOperation, reg.SellOperation, reg.TaxCalculation)
 
 	t.Run("should execute with success with case_1 data", func(t *testing.T) {
+		handler := handlers.NewTerminalHandler(reg.BuyOperation, reg.SellOperation, reg.TaxCalculation)
 		input := "[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100},{\"operation\":\"sell\", \"unit-cost\":10.00, \"quantity\": 100}]"
 		var inputReader io.Reader = strings.NewReader(input)
 
@@ -26,8 +26,6 @@ func TestHandler(t *testing.T) {
 		os.Stdout = writer
 
 		handler.Execute(inputReader)
-		err = writer.Close()
-		assert.Nil(t, err)
 
 		out, err := io.ReadAll(reader)
 		assert.Nil(t, err)
