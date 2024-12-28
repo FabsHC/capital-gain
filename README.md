@@ -4,6 +4,8 @@
 ![Build & Test](https://github.com/FabsHC/capital-gain/actions/workflows/go.yml/badge.svg)
 [![Go Coverage](https://github.com/FabsHC/capital-gain/wiki/coverage.svg)](https://raw.githack.com/wiki/FabsHC/capital-gain/coverage.html)
 
+FYI: The Clojure version of this project: [stocks-tax-calculation](https://github.com/FabsHC/stock-tax-calculation)
+
 This project simulates the purchase and sale of shares. It does not use any database, all data is stored in memory during the execution of a list of operations.
 
 The application will receive a list of operations that it can execute purchase and sale, returning for each operation how much tax was paid.
